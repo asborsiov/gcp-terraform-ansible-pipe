@@ -1,0 +1,31 @@
+---
+- name: Install requirements
+  apt: 
+    name: 
+      - wget
+      - python-psycopg2
+    state: present
+
+- name: Add PostgreSQL 11 keys
+  shell: wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
+
+- name: Update and upgrade apt packages
+  become: true
+  apt:
+    update_cache: yes
+    cache_valid_time: 86400 #One day
+
+- name: Add PostgreSQL 11 to source list
+  shell: echo deb http://apt.postgresql.org/pub/repos/apt/ stretch-pgdg main > /etc/apt/sources.list.d/postgresql.list
+
+- name: Install PosgresSQL 11
+  apt:
+    name: postgresql-11
+    state: present
+    update_cache: yes
+
+- name: Check that PostgreSQL service is running
+  service: name=postgresql state=started enabled=yes
+
+
+
