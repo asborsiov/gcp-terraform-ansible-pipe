@@ -5,7 +5,7 @@ Open cloud shell (top right corner) and execute this commands
 ```bash
 sudo -s
 cd ~
-git clone https://github.com/RT-Data-Engineer/gcp-terraform-ansible-pipe.git /opt/bootstrap
+git clone https://github.com/asborsiov/gcp-terraform-ansible-pipe.git /opt/bootstrap
 bash /opt/bootstrap/install.sh
 ```
 # How to ssh manually 
