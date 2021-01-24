@@ -1,0 +1,59 @@
+---
+- name: Install requirements
+  apt: 
+    name: 
+      - build-essential
+      - freetds-bin
+      - krb5-user
+      - ldap-utils
+      - libffi6
+      - libsasl2-2
+      - libsasl2-modules
+      - libssl1.1
+      - locales
+      - lsb-release
+      - sasl2-bin
+      - sqlite3
+      - unixodbc
+      - python3-pip
+    state: present
+
+- name: Install airflow 
+  shell: pip3 install apache-airflow==1.10.14
+
+- name: Setup Enviroment
+  ansible.builtin.file:
+      path: ~/airflow/dags
+      state: directory
+  environment:
+        AIRFLOW_HOME: ~/airflow
+        PATH: $PATH:~/.local/bin
+
+- name: Init Airflow
+  shell: "{{ item }}"
+  with_items:
+    - chdir /opt
+    - airflow initdb
+
+- name: Create server service
+  ansible.builtin.copy:
+    src: "{{file_location}}/airflow-server.service"
+    dest: /etc/systemd/system/airflow-server.service
+
+- name: Create scheduler service
+  ansible.builtin.copy:
+    src: "{{file_location}}/airflow-scheduler.service"
+    dest: /etc/systemd/system/airflow-scheduler.service
+    
+- name: Init Airflow
+  shell: systemctl daemon-reload
+
+- name: Start service airflow-server
+  ansible.builtin.service:
+    name: airflow-server
+    state: started
+
+- name: Start service airflow-scheduler
+  ansible.builtin.service:
+    name: airflow-scheduler
+    state: started

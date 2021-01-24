@@ -1,0 +1,9 @@
+---
+db_user: root
+db_name: dbname
+db_password: toor
+
+update_apt_cache: true
+
+#ile_location: /root/ansible/git/gcp-terraform-ansible-pipe/ansible/files
+file_location: /opt/bootstrap/ansible/files/

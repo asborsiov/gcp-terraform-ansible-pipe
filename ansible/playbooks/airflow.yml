@@ -1,0 +1,9 @@
+---
+- name: Setup Airflow service
+  hosts: airflow
+  become: yes
+  gather_facts: false
+  vars_files:
+    - vars/main.yml
+  roles:
+  - airflow

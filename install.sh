@@ -28,6 +28,8 @@ gcloud compute project-info add-metadata \
     --metadata enable-oslogin=TRUE
 
 #install ansible and terraform
+apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 93C4A3FD7BB9C367
+echo "deb http://ppa.launchpad.net/ansible/ansible/ubuntu bionic main" | tee /etc/apt/sources.list.d/ansible.list
 apt-get update && apt-get install ansible -y
 
 wget https://releases.hashicorp.com/terraform/0.14.3/terraform_0.14.3_linux_amd64.zip
@@ -73,8 +75,8 @@ cd /opt/bootstrap/template && terraform init && terraform apply -var-file='/opt/
 sleep 10
 
 #executing ansible inits
-cd /opt/bootstrap/ansible && ansible-playbook -i /opt/bootstrap/hosts airflow.yaml --private-key /opt/bootstrap/ssh-key
+cd /opt/bootstrap/ansible && ansible-playbook -i /opt/bootstrap/hosts playbooks/install_all.yml --private-key /opt/bootstrap/ssh-key
 
-cd /opt/bootstrap/ansible && ansible-playbook -i /opt/bootstrap/hosts postgres-kafka-nifi.yaml --private-key /opt/bootstrap/ssh-key
+#cd /opt/bootstrap/ansible && ansible-playbook -i /opt/bootstrap/hosts postgres-kafka-nifi.yaml --private-key /opt/bootstrap/ssh-key
 
 echo "INSTALLATION DONE"

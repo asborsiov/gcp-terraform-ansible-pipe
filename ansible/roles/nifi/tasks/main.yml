@@ -1,0 +1,24 @@
+- name: Install requirements
+  apt: 
+    name: openjdk-8-jdk-headless
+    state: present
+
+- name: Install Nifi
+  shell: "{{ item }}"
+  with_items:
+    - chdir /tmp
+    - wget https://apache-mirror.rbc.ru/pub/apache/nifi/1.12.1/nifi-1.12.1-bin.tar.gz
+    - tar vzxf nifi-1.12.1-bin.tar.gz
+    - rm -f nifi-1.12.1-bin.tar.gz
+    - sudo mv -u nifi-1.12.1 /opt
+    - chdir /opt/nifi-1.12.1
+    - sudo /opt/nifi-1.12.1/bin/nifi.sh install
+    - sudo /opt/nifi-1.12.1/bin/nifi.sh start
+
+- name: Reload units
+  shell: systemctl daemon-reload
+
+- name: Start service nifi
+  ansible.builtin.service:
+    name: nifi
+    state: started
